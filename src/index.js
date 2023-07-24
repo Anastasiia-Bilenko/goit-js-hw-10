@@ -31,16 +31,17 @@ fetchBreeds()
     select: '#selectElement'
   })})  
   .catch(err => {
-    selectors.error.style.display = 'block';
     console.log(err)})
 
 
 function catInfoFunc(evt){
+try {
 selectors.loader.style.display = 'block';
-selectors.catInfo.style.display = 'none';
-fetchCatByBreed(evt.target.value)
+selectors.catInfo.style.display = 'none'
+selectors.error.style.display = 'none';
+const catValue = evt.target.value;
+fetchCatByBreed(catValue)
 .then(data =>{
-   
     let dataInform = data[0].breeds[0];
     let {reference_image_id, name, description, temperament} = dataInform;
     console.log(dataInform)
@@ -51,14 +52,20 @@ fetchCatByBreed(evt.target.value)
       <p class = "cat-description"> ${description}</p>
       <p class=" cat-temperament">Temperament : ${temperament}</p>
     </div>`
+    selectors.catInfo.style.display = 'flex'
+    selectors.error.style.display = 'none'
     
 })
 .catch(err => {
+    selectors.catInfo.style.display = 'none'
     selectors.error.style.display = 'block';
     console.log(err)})
 .finally(()=> {
     selectors.loader.style.display = 'none'
-    selectors.catInfo.style.display = 'flex'})
+    // selectors.catInfo.style.display = 'flex'
+})
+} catch (error) {
+    console.log(error)
 }
-console.log(catInfoFunc())
+}
 
